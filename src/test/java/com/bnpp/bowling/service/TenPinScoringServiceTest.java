@@ -13,4 +13,10 @@ class TenPinScoringServiceTest {
     void testAllMisses() {
         assertEquals(0, service.calculateScore("--------------------"));
     }
+
+    @Test
+    @DisplayName("All ones should score 20")
+    void testAllOnes() {
+        assertEquals(20, service.calculateScore("11111111111111111111"));
+    }
 }
