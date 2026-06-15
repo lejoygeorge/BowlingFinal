@@ -42,4 +42,24 @@ class BowlingControllerTest {
                 .andExpect(jsonPath("$.score").value(expectedScore))
                 .andExpect(jsonPath("$.sequence").value(validSequence));
     }
+
+    @Test
+    @DisplayName("POST /score with empty sequence should trigger validation and return 400 Bad Request")
+    void calculateGameScore_EmptySequence_ReturnsBadRequest() throws Exception {
+        ScoreRequest request = new ScoreRequest("");
+        mockMvc.perform(post("/api/v1/bowling/score")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("POST /score with invalid characters should trigger validation and return 400 Bad Request")
+    void calculateGameScore_InvalidCharacters_ReturnsBadRequest() throws Exception {
+        ScoreRequest request = new ScoreRequest("X 5/ ABC");
+        mockMvc.perform(post("/api/v1/bowling/score")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
 }
