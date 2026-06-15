@@ -19,4 +19,10 @@ class TenPinScoringServiceTest {
     void testAllOnes() {
         assertEquals(20, service.calculateScore("11111111111111111111"));
     }
+
+    @Test
+    @DisplayName("Pairs of 9 and miss should score 90")
+    void testPairsOfNineAndMiss() {
+        assertEquals(90, service.calculateScore("9-9-9-9-9-9-9-9-9-9-"));
+    }
 }
