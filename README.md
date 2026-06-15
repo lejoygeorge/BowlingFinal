@@ -12,6 +12,20 @@ This project is built using modern Java and Spring Ecosystem tools:
 * **Boilerplate Reduction:** Lombok
 * **Encoding:** UTF-8
 
+## 📦 Key Dependencies
+
+* **Spring Web:** For building RESTful web services and controllers.
+* **Spring Validation:** Jakarta Bean Validation (`@Valid`, `@Pattern`, etc.) for robust API input checking.
+* **Jackson Databind Nullable:** For handling advanced JSON serialization and deserialization.
+
+## 🧪 Testing & Code Quality Tools
+
+This project places a heavy emphasis on test reliability and code quality, utilizing the following plugins:
+
+* **JUnit 5 (Jupiter) & Spring Boot Test:** The primary testing frameworks.
+* **JaCoCo (Java Code Coverage):** Configured to automatically generate test coverage reports during the standard build lifecycle.
+* **PITest (Mutation Testing):** Integrated to evaluate the effectiveness of the unit tests by injecting faults into the code (`com.bnpp.bowling.*`).
+
 ---
 
 ## 🚀 Getting Started
@@ -63,4 +77,92 @@ To execute the JUnit 5 test suite:
 mvn clean test
 
 ```
+
+### Code Coverage (JaCoCo)
+
+The JaCoCo plugin is bound to the test phase. Running the tests will automatically generate a coverage report.
+You can view the HTML report by navigating to:
+
+```text
+target/site/jacoco/index.html
+
+```
+
+### Mutation Testing (PITest)
+
+To run mutation testing and ensure your tests are actually catching behavioral changes:
+
+```bash
+mvn clean test-compile org.pitest:pitest-maven:mutationCoverage -Djacoco.skip=true
+
+```
+
+*Note: PITest is configured to utilize 4 threads for faster execution and excludes the main `BowlingApplication` class from mutation.* You can view the generated mutation report at:
+
+```text
+target/pit-reports/index.html
+
+```
+
+## 🔌 API Reference
+
+### Calculate Score
+Calculates the total score for a valid sequence of American Ten-Pin Bowling rolls.
+
+**Endpoint:** `POST /api/v1/bowling/score`
+
+**Headers:** `Content-Type: application/json`
+
+#### Success Response (200 OK)
+
+**Request Body:**
+```json
+{
+  "sequence": "X 7/ 9- X -8 8/ -6 X X X81"
+}
+
+```
+
+**Response Body:**
+
+```json
+{
+  "score": 167,
+  "sequence": "X 7/ 9- X -8 8/ -6 X X X81"
+}
+
+```
+
 ---
+
+#### Validation Error Response (400 Bad Request)
+
+If the API receives an invalid payload (e.g., empty string, null, or invalid characters like letters), it will cleanly reject the request.
+
+**Request Body:**
+
+```json
+{
+  "sequence": "X 5/ ABC"
+}
+
+```
+
+**Response Body:**
+
+```json
+{
+  "sequence": "Sequence contains invalid characters. Only digits (0-9), 'X', '/', '-', and spaces are allowed."
+}
+
+```
+
+---
+
+## ⚙️ Important Notes for Java 21
+
+Due to security updates in Java 21 regarding dynamic agent loading (which affects testing libraries like Mockito), the Maven plugins in this project (`maven-surefire-plugin` and `pitest-maven`) have been explicitly configured with the `-XX:+EnableDynamicAgentLoading` JVM argument. This ensures tests run smoothly without disruptive console warnings.
+
+```
+
+```
