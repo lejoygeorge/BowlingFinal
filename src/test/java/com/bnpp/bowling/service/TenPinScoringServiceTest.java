@@ -48,4 +48,10 @@ class TenPinScoringServiceTest {
     void testAllSpareWithFinalFive() {
         assertEquals(150, scoringService.calculateScore("5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5"));
     }
+
+    @Test
+    @DisplayName("One Strike then misses should score 24")
+    void testOneStrikeAndThenAllMisses() {
+        assertEquals(24, scoringService.calculateScore("X 34 -- -- -- -- -- -- -- --"));
+    }
 }

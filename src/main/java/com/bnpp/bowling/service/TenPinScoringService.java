@@ -17,7 +17,10 @@ public class TenPinScoringService implements BowlingScoringService{
         int score = 0;
         int rollIndex = 0;
         for (int frame = 0; frame < FRAMESIZE; frame++) {
-            if (isSpare(rolls, rollIndex)) {
+            if (isStrike(rolls, rollIndex)) {
+                score += 10 + strikeBonus(rolls, rollIndex);
+                rollIndex += ONEROLL;
+            } else if (isSpare(rolls, rollIndex)) {
                 score += MAXPOINT + spareBonus(rolls, rollIndex);
                 rollIndex += TWOROLL;
             } else {
@@ -26,6 +29,14 @@ public class TenPinScoringService implements BowlingScoringService{
             }
         }
         return score;
+    }
+
+    private boolean isStrike(int[] rolls, int rollIndex) {
+        return rolls[rollIndex] == 10;
+    }
+
+    private int strikeBonus(int[] rolls, int rollIndex) {
+        return rolls[rollIndex + 1] + rolls[rollIndex + 2];
     }
 
     private boolean isSpare(int[] rolls, int rollIndex) {
