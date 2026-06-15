@@ -54,4 +54,16 @@ class TenPinScoringServiceTest {
     void testOneStrikeAndThenAllMisses() {
         assertEquals(24, scoringService.calculateScore("X 34 -- -- -- -- -- -- -- --"));
     }
+
+    @Test
+    @DisplayName("All Strikes should score 300")
+    void testAllStrike() {
+        assertEquals(300, scoringService.calculateScore("X X X X X X X X X X X X"));
+    }
+
+    @Test
+    @DisplayName("Mixed complex game with bonus")
+    void testMixedComplexGameWithBonus() {
+        assertEquals(167, scoringService.calculateScore("X 7/ 9- X -8 8/ -6 X X X81"));
+    }
 }
